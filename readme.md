@@ -58,7 +58,19 @@ my_project/
   * [x] database
   * [ ] features
     * [ ] food
+      * [ ] CRUD routes
+      * [ ] CRUD service
+      * [ ] validation
     * [ ] users
+      * [X] CRUD routes
+      * [ ] CRUD service
+      * [ ] validation
     * [ ] money
+      * [ ] CRUD routes
+      * [ ] CRUD service
+      * [ ] validation
     * [ ] orders
+      * [ ] CRUD routes
+      * [ ] CRUD service
+      * [ ] validation
 * [ ] Run proyect file

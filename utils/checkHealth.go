@@ -14,6 +14,7 @@ func CheckHealth(w http.ResponseWriter, r *http.Request) {
 	jsonResponse, err := json.Marshal(response)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		Logger.Fatal(err.Error())
 		return
 	}
 

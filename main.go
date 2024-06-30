@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	pkg "storegestserver/pkg/database"
+	featuresApi "storegestserver/pkg/features"
 	"storegestserver/utils"
 
 	"github.com/gorilla/mux"
@@ -25,6 +26,9 @@ func main() {
 	pkg.InitDB()
 	mainRouter := mux.NewRouter()
 	port := os.Getenv("PORT")
+
+	// api
+	featuresApi.RegisterSubRoutes(mainRouter)
 
 	mainRouter.HandleFunc("/checkhealth", utils.CheckHealth)
 
