@@ -55,11 +55,10 @@ my_project/
 
 * [ ] pkg
   * [ ] auth
-  * [ ] crud
   * [x] database
-* [ ] features
-  * [ ] food
-  * [ ] users
-  * [ ] money
-  * [ ] orders
+  * [ ] features
+    * [ ] food
+    * [ ] users
+    * [ ] money
+    * [ ] orders
 * [ ] Run proyect file
