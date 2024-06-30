@@ -2,18 +2,24 @@ package main
 
 import (
 	"fmt"
-	"net/http"
+	pkg "storegestserver/pkg/database"
+	"storegestserver/utils"
 
-	"github.com/gorilla/mux"
+	"go.uber.org/zap"
 )
 
-func helloHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Hello, World!"))
+var Logger *zap.Logger
+
+// execute before main
+func init() {
+	Logger = utils.NewLogger()
+	pkg.Logger = Logger
 }
 
 func main() {
-	r := mux.NewRouter()
-	r.HandleFunc("/hello", helloHandler).Methods("GET")
-	fmt.Println("Server running on 8080")
-	http.ListenAndServe(":8080", r)
+	defer Logger.Sync() // flushes buffer, if any
+
+	fmt.Println(Logger)
+	utils.Dotconfig()
+	pkg.InitDB()
 }

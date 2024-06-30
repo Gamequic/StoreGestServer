@@ -51,14 +51,15 @@ my_project/
 
 ./go.mod && ./go.sum // Dependencies for proyect
 
-
 # To-do
+
 * [ ] pkg
-    * [ ] auth
-    * [ ] crud
-    * [ ] database
+  * [ ] auth
+  * [ ] crud
+  * [x] database
 * [ ] features
-    * [ ] food
-    * [ ] users
-    * [ ] money
-    * [ ] orders
+  * [ ] food
+  * [ ] users
+  * [ ] money
+  * [ ] orders
+* [ ] Run proyect file
