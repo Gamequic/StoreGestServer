@@ -63,7 +63,7 @@ my_project/
       * [ ] validation
     * [ ] users
       * [X] CRUD routes
-      * [ ] CRUD service
+      * [X] CRUD service
       * [ ] validation
     * [ ] money
       * [ ] CRUD routes
