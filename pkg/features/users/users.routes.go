@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 	userservice "storegestserver/pkg/features/users/service"
+	"storegestserver/utils"
 	"strconv"
 
 	"github.com/gorilla/mux"
@@ -15,6 +16,7 @@ var logger *zap.Logger
 // CRUD
 
 func create(w http.ResponseWriter, r *http.Request) {
+	logger = utils.NewLogger()
 	var user userservice.Users
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		logger.Error("Failed to decode request body", zap.Error(err))
@@ -26,14 +28,21 @@ func create(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(user)
 }
 
-func read(w http.ResponseWriter, r *http.Request) {
+func find(w http.ResponseWriter, r *http.Request) {
+	//Logger
+	logger = utils.NewLogger()
+
+	//Service
 	var users []userservice.Users
-	userservice.Find(&users)
-	w.WriteHeader(http.StatusOK)
+	var httpsResponse int = userservice.Find(&users)
+
+	//Https response
+	w.WriteHeader(httpsResponse)
 	json.NewEncoder(w).Encode(users)
 }
 
 func findOne(w http.ResponseWriter, r *http.Request) {
+	logger = utils.NewLogger()
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
@@ -42,12 +51,13 @@ func findOne(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var user userservice.Users
-	userservice.FindOne(&user, uint(id))
-	w.WriteHeader(http.StatusOK)
+	var httpsResponse int = userservice.FindOne(&user, uint(id))
+	w.WriteHeader(httpsResponse)
 	json.NewEncoder(w).Encode(user)
 }
 
 func update(w http.ResponseWriter, r *http.Request) {
+	logger = utils.NewLogger()
 	var user userservice.Users
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
 		logger.Error("Failed to decode request body", zap.Error(err))
@@ -60,6 +70,7 @@ func update(w http.ResponseWriter, r *http.Request) {
 }
 
 func delete(w http.ResponseWriter, r *http.Request) {
+	logger = utils.NewLogger()
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
@@ -78,7 +89,7 @@ func RegisterSubRoutes(router *mux.Router) {
 	usersRouter := router.PathPrefix("/users").Subrouter()
 
 	usersRouter.HandleFunc("/", create).Methods("POST")
-	usersRouter.HandleFunc("/", read).Methods("GET")
+	usersRouter.HandleFunc("/", find).Methods("GET")
 	usersRouter.HandleFunc("/{id}", findOne).Methods("GET")
 	usersRouter.HandleFunc("/", update).Methods("PATCH")
 	usersRouter.HandleFunc("/{id}", delete).Methods("DELETE")

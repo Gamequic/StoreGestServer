@@ -54,7 +54,6 @@ my_project/
 # To-do
 
 * [ ] pkg
-  * [ ] auth
   * [x] database
   * [ ] features
     * [ ] food
@@ -73,4 +72,10 @@ my_project/
       * [ ] CRUD routes
       * [ ] CRUD service
       * [ ] validation
+  * [ ] middlewares
+    * [ ] auth
+    * [ ] rootAuth
+    * [X] errorHandler
 * [ ] Run proyect file
+* [ ] Fix Logger
+* [ ] Explain root fails

@@ -7,6 +7,7 @@ import (
 	pkg "storegestserver/pkg/database"
 	featuresApi "storegestserver/pkg/features"
 	"storegestserver/utils"
+	"storegestserver/utils/middlewares"
 
 	"github.com/gorilla/mux"
 	"go.uber.org/zap"
@@ -26,6 +27,9 @@ func main() {
 	pkg.InitDB()
 	mainRouter := mux.NewRouter()
 	port := os.Getenv("PORT")
+
+	mainRouter.Use(middlewares.ErrorHandler)
+	mainRouter.Use(middlewares.GormErrorHandler)
 
 	// api
 	featuresApi.RegisterSubRoutes(mainRouter)

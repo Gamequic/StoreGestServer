@@ -2,7 +2,10 @@ package userservice
 
 import (
 	"fmt"
+	"net/http"
 	"storegestserver/pkg/database"
+	"storegestserver/utils"
+	"storegestserver/utils/middlewares"
 
 	"go.uber.org/zap"
 	"gorm.io/gorm"
@@ -12,14 +15,15 @@ var Logger *zap.Logger
 
 // Define the user model
 type Users struct {
-	gorm.Model // Embedding gorm.Model for default fields like ID, CreatedAt, UpdatedAt, DeletedAt
-	Name       string
-	Email      string `gorm:"unique"`
-	Password   string
+	gorm.Model        // Embedding gorm.Model for default fields like ID, CreatedAt, UpdatedAt, DeletedAt
+	Name       string `gorm:"not null"`
+	Email      string `gorm:"unique;not null"`
+	Password   string `gorm:"not null"`
 }
 
 // Initialize the user service
 func InitUsersService() {
+	Logger = utils.NewLogger()
 	err := database.DB.AutoMigrate(&Users{})
 	if err != nil {
 		Logger.Error(fmt.Sprint("Failed to migrate database:", err))
@@ -30,30 +34,52 @@ func InitUsersService() {
 
 func Create(u *Users) {
 	if err := database.DB.Create(u).Error; err != nil {
-		Logger.Error("Failed to create user:", zap.Error(err))
+		if err.Error() == `ERROR: duplicate key value violates unique constraint "uni_users_email" (SQLSTATE 23505)` {
+			panic(middlewares.GormError{Code: 409, Message: "Email is on use", IsGorm: true})
+		} else {
+			panic(err)
+		}
 	}
 }
 
-func Find(users *[]Users) {
-	if err := database.DB.Find(users).Error; err != nil {
-		Logger.Error("Failed to find users:", zap.Error(err))
-	}
+func Find(u *[]Users) int {
+	database.DB.Find(u)
+	return http.StatusOK
 }
 
-func FindOne(user *Users, id uint) {
+func FindOne(user *Users, id uint) int {
 	if err := database.DB.First(user, id).Error; err != nil {
-		Logger.Error("Failed to find user:", zap.Error(err))
+		if err.Error() == "record not found" {
+			panic(middlewares.GormError{Code: 404, Message: "Users not found", IsGorm: true})
+		} else {
+			panic(err)
+		}
 	}
+	return http.StatusOK
 }
 
 func Update(u *Users) {
+	// No autorize editing no existing users
+	var previousUsers Users
+	FindOne(&previousUsers, uint(u.ID))
+
 	if err := database.DB.Save(u).Error; err != nil {
-		Logger.Error("Failed to update user:", zap.Error(err))
+		if err.Error() == `ERROR: duplicate key value violates unique constraint "uni_users_email" (SQLSTATE 23505)` {
+			panic(middlewares.GormError{Code: 409, Message: "Email is on use", IsGorm: true})
+		} else {
+			panic(err)
+		}
 	}
 }
 
 func Delete(id int) {
+	Logger = utils.NewLogger()
+
+	// No autorize deleting no existing users
+	var previousUsers Users
+	FindOne(&previousUsers, uint(id))
+
 	if err := database.DB.Delete(&Users{}, id).Error; err != nil {
-		Logger.Error("Failed to delete user:", zap.Error(err))
+		panic(err)
 	}
 }
