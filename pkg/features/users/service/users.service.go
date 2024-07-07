@@ -8,6 +8,7 @@ import (
 	"storegestserver/utils/middlewares"
 
 	"go.uber.org/zap"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -33,6 +34,10 @@ func InitUsersService() {
 // CRUD Operations
 
 func Create(u *Users) {
+	// Encrypt password
+	bytes, _ := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
+	u.Password = string(bytes)
+
 	if err := database.DB.Create(u).Error; err != nil {
 		if err.Error() == `ERROR: duplicate key value violates unique constraint "uni_users_email" (SQLSTATE 23505)` {
 			panic(middlewares.GormError{Code: 409, Message: "Email is on use", IsGorm: true})
@@ -62,6 +67,10 @@ func Update(u *Users) {
 	// No autorize editing no existing users
 	var previousUsers Users
 	FindOne(&previousUsers, uint(u.ID))
+
+	// Encrypt password
+	bytes, _ := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
+	u.Password = string(bytes)
 
 	if err := database.DB.Save(u).Error; err != nil {
 		if err.Error() == `ERROR: duplicate key value violates unique constraint "uni_users_email" (SQLSTATE 23505)` {
