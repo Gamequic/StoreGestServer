@@ -60,10 +60,10 @@ my_project/
       * [ ] CRUD routes
       * [ ] CRUD service
       * [ ] validation
-    * [ ] users
+    * [X] users
       * [X] CRUD routes
       * [X] CRUD service
-      * [ ] validation
+      * [X] validation
     * [ ] money
       * [ ] CRUD routes
       * [ ] CRUD service
