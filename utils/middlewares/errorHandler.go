@@ -23,7 +23,7 @@ func GormErrorHandler(next http.Handler) http.Handler {
 		defer func() {
 			if err := recover(); err != nil {
 				if r, ok := err.(GormError); ok { // It is a gorm error
-					logger.Error("Panic gorm occurred", zap.Any("error", err))
+					logger.Error("Controled panic occurred", zap.Any("error", err))
 					http.Error(w, r.Message, r.Code)
 				} else {
 					panic(err)

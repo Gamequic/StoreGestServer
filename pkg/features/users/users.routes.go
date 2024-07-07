@@ -3,8 +3,11 @@ package users
 import (
 	"encoding/json"
 	"net/http"
+	"reflect"
 	userservice "storegestserver/pkg/features/users/service"
+	userstruct "storegestserver/pkg/features/users/struct"
 	"storegestserver/utils"
+	"storegestserver/utils/middlewares"
 	"strconv"
 
 	"github.com/gorilla/mux"
@@ -88,7 +91,9 @@ func delete(w http.ResponseWriter, r *http.Request) {
 func RegisterSubRoutes(router *mux.Router) {
 	usersRouter := router.PathPrefix("/users").Subrouter()
 
-	usersRouter.HandleFunc("/", create).Methods("POST")
+	usersRouter.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		middlewares.ValidatorHandler(http.HandlerFunc(create), reflect.TypeOf(userstruct.CreateUser{})).ServeHTTP(w, r)
+	}).Methods("POST")
 	usersRouter.HandleFunc("/", find).Methods("GET")
 	usersRouter.HandleFunc("/{id}", findOne).Methods("GET")
 	usersRouter.HandleFunc("/", update).Methods("PATCH")

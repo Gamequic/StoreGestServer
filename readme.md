@@ -76,6 +76,6 @@ my_project/
     * [ ] auth
     * [ ] rootAuth
     * [X] errorHandler
+    * [X] ValidatorHandler
 * [ ] Run proyect file
-* [ ] Fix Logger
-* [ ] Explain root fails
+* [ ] Explain erros captures
