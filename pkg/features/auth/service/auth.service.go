@@ -59,11 +59,6 @@ func LogIn(u *authstruct.LogIn) string {
 	return tokenString
 }
 
-// func ChangePassword(u *[]Users) int {
-// 	database.DB.Find(u)
-
-// }
-
 // func RequestPasswordChange(user *Users, id uint) int {
 // 	if err := database.DB.First(user, id).Error; err != nil {
 // 		if err.Error() == "record not found" {

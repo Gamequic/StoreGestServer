@@ -23,16 +23,6 @@ func LogIn(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(token)
 }
 
-// func ChangePassword(w http.ResponseWriter, r *http.Request) {
-// 	//Service
-// 	var users []userservice.Users
-// 	var httpsResponse int = userservice.Find(&users)
-
-// 	//Https response
-// 	w.WriteHeader(httpsResponse)
-// 	json.NewEncoder(w).Encode(users)
-// }
-
 // func RequestPasswordChange(w http.ResponseWriter, r *http.Request) {
 // 	vars := mux.Vars(r)
 // 	id, err := strconv.Atoi(vars["id"])
@@ -64,7 +54,6 @@ func RegisterSubRoutes(router *mux.Router) {
 
 	authValidator.HandleFunc("/login", LogIn).Methods("POST")
 
-	// authRouter.HandleFunc("/changePassword", ChangePassword).Methods("GET")
 	// authRouter.HandleFunc("/RequestPasswordChange", RequestPasswordChange).Methods("DELETE")
 	// authRouter.HandleFunc("/ApplyPasswordChange", ApplyPasswordChange).Methods("DELETE")
 }

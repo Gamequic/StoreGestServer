@@ -1,10 +1,10 @@
 package middlewares
 
 import (
+	"context"
 	"net/http"
 	"os"
 	authstruct "storegestserver/pkg/features/auth/struct"
-	"strconv"
 
 	"github.com/golang-jwt/jwt"
 )
@@ -15,7 +15,7 @@ func AuthHandler(next http.Handler) http.Handler {
 
 		authHeader := r.Header.Get("auth")
 		if authHeader == "" {
-			panic(GormError{Code: http.StatusBadRequest, Message: "Auth Header missing", IsGorm: true})
+			panic(GormError{Code: http.StatusBadRequest, Message: "auth Header missing", IsGorm: true})
 		}
 
 		tokenData := &authstruct.TokenStruct{}
@@ -34,8 +34,9 @@ func AuthHandler(next http.Handler) http.Handler {
 			panic(GormError{Code: http.StatusUnauthorized, Message: "Invalid token", IsGorm: true})
 		}
 
-		w.Header().Set("userId", strconv.Itoa(tokenData.Id))
-
-		next.ServeHTTP(w, r)
+		// Extract userId from token claims and add it to the context
+		userId := tokenData.Id
+		ctx := context.WithValue(r.Context(), "userId", userId)
+		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
