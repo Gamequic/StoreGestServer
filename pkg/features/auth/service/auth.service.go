@@ -2,6 +2,7 @@ package authservice
 
 import (
 	"fmt"
+	"os"
 	authstruct "storegestserver/pkg/features/auth/struct"
 	userservice "storegestserver/pkg/features/users/service"
 	"storegestserver/utils/middlewares"
@@ -14,8 +15,6 @@ import (
 
 var Logger *zap.Logger
 
-var jwtKey = []byte("my_secret_key")
-
 // Initialize the auth service
 func InitAuthService() {
 
@@ -24,6 +23,8 @@ func InitAuthService() {
 // Auth Operations
 
 func LogIn(u *authstruct.LogIn) string {
+	var jwtKey = []byte(os.Getenv("JWTSECRET"))
+
 	// Check if user exists
 	var user userservice.Users
 	userservice.FindByEmail(&user, u.Email)
@@ -43,6 +44,7 @@ func LogIn(u *authstruct.LogIn) string {
 	TokenData := &authstruct.TokenStruct{
 		Username: user.Name,
 		Email:    user.Email,
+		Id:       int(user.ID),
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},
@@ -59,7 +61,7 @@ func LogIn(u *authstruct.LogIn) string {
 
 // func ChangePassword(u *[]Users) int {
 // 	database.DB.Find(u)
-// 	return http.StatusOK
+
 // }
 
 // func RequestPasswordChange(user *Users, id uint) int {

@@ -6,6 +6,7 @@ type TokenStruct struct {
 	jwt.StandardClaims
 	Username string `json:"username"`
 	Email    string
+	Id       int
 }
 
 type LogIn struct {

@@ -74,10 +74,10 @@ my_project/
       * [ ] CRUD service
       * [ ] validation
     * [ ] auth
-      * Routes
-      * Service
+      * [ ] Routes
+      * [ ] Service
   * [ ] middlewares
-    * [ ] auth
+    * [X] auth
     * [ ] rootAuth
     * [X] errorHandler
     * [X] ValidatorHandler
