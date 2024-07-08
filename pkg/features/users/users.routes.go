@@ -18,21 +18,18 @@ var logger *zap.Logger
 
 // CRUD
 
-// Put a middleware between the petetion
 func create(w http.ResponseWriter, r *http.Request) {
-	middlewares.ValidatorHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		var user userservice.Users
+	var user userservice.Users
 
-		/*
-			This error is alredy been check it on middlewares.ValidatorHandler
-			utils/middlewares/validatorHandler.go:29:68
-		*/
-		json.NewDecoder(r.Body).Decode(&user)
+	/*
+		This error is alredy been check it on middlewares.ValidatorHandler
+		utils/middlewares/validatorHandler.go:29:68
+	*/
+	json.NewDecoder(r.Body).Decode(&user)
 
-		userservice.Create(&user)
-		w.WriteHeader(http.StatusCreated)
-		json.NewEncoder(w).Encode(user)
-	}), reflect.TypeOf(userstruct.CreateUser{})).ServeHTTP(w, r)
+	userservice.Create(&user)
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(user)
 }
 
 func find(w http.ResponseWriter, r *http.Request) {
@@ -46,27 +43,23 @@ func find(w http.ResponseWriter, r *http.Request) {
 }
 
 func findOne(w http.ResponseWriter, r *http.Request) {
-	middlewares.ValidatorHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		vars := mux.Vars(r)
-		id, err := strconv.Atoi(vars["id"])
-		if err != nil {
-			panic(middlewares.GormError{Code: 400, Message: err.Error(), IsGorm: true})
-		}
-		var user userservice.Users
-		var httpsResponse int = userservice.FindOne(&user, uint(id))
-		w.WriteHeader(httpsResponse)
-		json.NewEncoder(w).Encode(user)
-	}), reflect.TypeOf(userstruct.CreateUser{})).ServeHTTP(w, r)
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		panic(middlewares.GormError{Code: 400, Message: err.Error(), IsGorm: true})
+	}
+	var user userservice.Users
+	var httpsResponse int = userservice.FindOne(&user, uint(id))
+	w.WriteHeader(httpsResponse)
+	json.NewEncoder(w).Encode(user)
 }
 
 func update(w http.ResponseWriter, r *http.Request) {
-	middlewares.ValidatorHandler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		var user userservice.Users
-		json.NewDecoder(r.Body).Decode(&user)
-		userservice.Update(&user)
-		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(user)
-	}), reflect.TypeOf(userstruct.UpdateUser{})).ServeHTTP(w, r)
+	var user userservice.Users
+	json.NewDecoder(r.Body).Decode(&user)
+	userservice.Update(&user)
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(user)
 }
 
 func delete(w http.ResponseWriter, r *http.Request) {
@@ -88,9 +81,13 @@ func delete(w http.ResponseWriter, r *http.Request) {
 func RegisterSubRoutes(router *mux.Router) {
 	usersRouter := router.PathPrefix("/users").Subrouter()
 
-	usersRouter.HandleFunc("/", create).Methods("POST")
+	// ValidatorHandler
+	usersValidtor := usersRouter.NewRoute().Subrouter()
+	usersValidtor.Use(middlewares.ValidatorHandler(reflect.TypeOf(userstruct.UpdateUser{})))
+	usersValidtor.HandleFunc("/", create).Methods("POST")
+	usersValidtor.HandleFunc("/", update).Methods("PATCH")
+
 	usersRouter.HandleFunc("/", find).Methods("GET")
 	usersRouter.HandleFunc("/{id}", findOne).Methods("GET")
-	usersRouter.HandleFunc("/", update).Methods("PATCH")
 	usersRouter.HandleFunc("/{id}", delete).Methods("DELETE")
 }
