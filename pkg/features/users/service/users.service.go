@@ -63,6 +63,17 @@ func FindOne(user *Users, id uint) int {
 	return http.StatusOK
 }
 
+func FindByEmail(user *Users, email string) int {
+	if err := database.DB.Where("email = ?", email).First(user).Error; err != nil {
+		if err.Error() == "record not found" {
+			panic(middlewares.GormError{Code: 404, Message: "User not found", IsGorm: true})
+		} else {
+			panic(err)
+		}
+	}
+	return http.StatusOK
+}
+
 func Update(u *Users) {
 	// No autorize editing no existing users
 	var previousUsers Users

@@ -64,7 +64,7 @@ my_project/
       * [X] CRUD routes
       * [X] CRUD service
       * [X] validation
-      * [ ] Encrypt
+      * [X] Encrypt
     * [ ] money
       * [ ] CRUD routes
       * [ ] CRUD service
@@ -73,10 +73,14 @@ my_project/
       * [ ] CRUD routes
       * [ ] CRUD service
       * [ ] validation
+    * [ ] auth
+      * Routes
+      * Service
   * [ ] middlewares
     * [ ] auth
     * [ ] rootAuth
     * [X] errorHandler
     * [X] ValidatorHandler
+    * [ ] ValidatorHandlerForURL
 * [ ] Run proyect file
 * [ ] Explain erros captures
