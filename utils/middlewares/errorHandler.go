@@ -19,11 +19,12 @@ type GormError struct {
 
 func GormErrorHandler(next http.Handler) http.Handler {
 	logger = utils.NewLogger()
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return http.HandlerFunc(func(w http.ResponseWriter, request *http.Request) {
 		defer func() {
 			if err := recover(); err != nil {
 				if r, ok := err.(GormError); ok { // It is a gorm error
-					logger.Error("Controled panic occurred", zap.Any("error", err))
+					var Message string = "Controled panic occurred from " + request.RemoteAddr + " to " + request.URL.Path
+					logger.Error(Message, zap.Any("error", err))
 					http.Error(w, r.Message, r.Code)
 				} else {
 					panic(err)
@@ -31,7 +32,7 @@ func GormErrorHandler(next http.Handler) http.Handler {
 			}
 		}()
 
-		next.ServeHTTP(w, r)
+		next.ServeHTTP(w, request)
 	})
 }
 

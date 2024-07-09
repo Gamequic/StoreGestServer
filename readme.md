@@ -79,7 +79,7 @@ my_project/
       * [X] Service
   * [ ] middlewares
     * [X] auth
-    * [ ] rootAuth
+    * [X] rootAuth
     * [X] errorHandler
     * [X] ValidatorHandler
     * [ ] ValidatorHandlerForURL
