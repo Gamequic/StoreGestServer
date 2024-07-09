@@ -57,7 +57,11 @@ func findOne(w http.ResponseWriter, r *http.Request) {
 func update(w http.ResponseWriter, r *http.Request) {
 	var user userservice.Users
 	json.NewDecoder(r.Body).Decode(&user)
-	userservice.Update(&user)
+
+	userIdInterface := r.Context().Value("userId")
+	userId := uint(userIdInterface.(int))
+
+	userservice.Update(&user, userId)
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(user)
 }
@@ -84,9 +88,11 @@ func RegisterSubRoutes(router *mux.Router) {
 	// ValidatorHandler
 	usersUpdateValidtor := usersRouter.NewRoute().Subrouter()
 	usersUpdateValidtor.Use(middlewares.ValidatorHandler(reflect.TypeOf(userstruct.UpdateUser{})))
+	usersUpdateValidtor.Use(middlewares.AuthHandler)
 
 	userCreateValidator := usersRouter.NewRoute().Subrouter()
 	userCreateValidator.Use(middlewares.ValidatorHandler(reflect.TypeOf(userstruct.CreateUser{})))
+	usersUpdateValidtor.Use(middlewares.AuthHandler)
 
 	usersRoot := usersRouter.NewRoute().Subrouter()
 	usersRoot.Use(middlewares.RootHandler)

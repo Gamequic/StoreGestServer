@@ -74,10 +74,15 @@ func FindByEmail(user *Users, email string) int {
 	return http.StatusOK
 }
 
-func Update(u *Users) {
+func Update(u *Users, userId uint) {
 	// No autorize editing no existing users
 	var previousUsers Users
 	FindOne(&previousUsers, uint(u.ID))
+
+	// Is the same user?
+	if u.ID != userId {
+		panic(middlewares.GormError{Code: http.StatusNotAcceptable, Message: "Is not allow to modify others users", IsGorm: true})
+	}
 
 	// Encrypt password
 	bytes, _ := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
