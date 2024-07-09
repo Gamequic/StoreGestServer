@@ -24,15 +24,12 @@ func LogIn(w http.ResponseWriter, r *http.Request) {
 }
 
 // func RequestPasswordChange(w http.ResponseWriter, r *http.Request) {
-// 	vars := mux.Vars(r)
-// 	id, err := strconv.Atoi(vars["id"])
-// 	if err != nil {
-// 		panic(middlewares.GormError{Code: 400, Message: err.Error(), IsGorm: true})
-// 	}
-// 	var user userservice.Users
-// 	var httpsResponse int = userservice.FindOne(&user, uint(id))
-// 	w.WriteHeader(httpsResponse)
-// 	json.NewEncoder(w).Encode(user)
+// 	var body authstruct.RequestChangePassword
+// 	json.NewDecoder(r.Body).Decode(&body)
+// 	var response map[string]interface{} = authservice.RequestPasswordChange(body.Email)
+// 	w.WriteHeader(http.StatusOK)
+// 	w.Header().Set("Content-Type", "application/json")
+// 	json.NewEncoder(w).Encode(response)
 // }
 
 // func ApplyPasswordChange(w http.ResponseWriter, r *http.Request) {
@@ -49,11 +46,13 @@ func RegisterSubRoutes(router *mux.Router) {
 	authRouter := router.PathPrefix("/auth").Subrouter()
 
 	// ValidatorHandler
-	authValidator := authRouter.NewRoute().Subrouter()
-	authValidator.Use(middlewares.ValidatorHandler(reflect.TypeOf(authstruct.LogIn{})))
+	authLogInValidator := authRouter.NewRoute().Subrouter()
+	authLogInValidator.Use(middlewares.ValidatorHandler(reflect.TypeOf(authstruct.LogIn{})))
 
-	authValidator.HandleFunc("/login", LogIn).Methods("POST")
+	// authRequestPassword := authRouter.NewRoute().Subrouter()
+	// authRequestPassword.Use(middlewares.ValidatorHandler(reflect.TypeOf(authstruct.RequestChangePassword{})))
 
-	// authRouter.HandleFunc("/RequestPasswordChange", RequestPasswordChange).Methods("DELETE")
-	// authRouter.HandleFunc("/ApplyPasswordChange", ApplyPasswordChange).Methods("DELETE")
+	// Endpoints
+	authLogInValidator.HandleFunc("/login", LogIn).Methods("POST")
+	// authRequestPassword.HandleFunc("/requestchangepassword", RequestPasswordChange).Methods("POST")
 }

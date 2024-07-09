@@ -13,3 +13,7 @@ type LogIn struct {
 	Email    string `validate:"required,email"`
 	Password string `validate:"required,min=8"`
 }
+
+// type RequestChangePassword struct {
+// 	Email string `validate:"required,email"`
+// }

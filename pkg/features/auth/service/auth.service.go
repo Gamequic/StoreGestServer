@@ -59,15 +59,27 @@ func LogIn(u *authstruct.LogIn) string {
 	return tokenString
 }
 
-// func RequestPasswordChange(user *Users, id uint) int {
-// 	if err := database.DB.First(user, id).Error; err != nil {
-// 		if err.Error() == "record not found" {
-// 			panic(middlewares.GormError{Code: 404, Message: "Users not found", IsGorm: true})
-// 		} else {
-// 			panic(err)
-// 		}
+// func RequestPasswordChange(Email string) map[string]interface{} {
+// 	var user userservice.Users
+// 	userservice.FindByEmail(&user, Email)
+
+// 	m := mail.NewMessage()
+// 	m.SetHeader("From", "demiancalleros1@gmail.com")
+// 	m.SetHeader("To", Email)
+// 	m.SetHeader("Subject", "Asunto del correo")
+// 	m.SetBody("text/plain", "Este es el cuerpo del correo.")
+
+// 	// Configura el servidor SMTP
+// 	d := mail.NewDialer("smtp-relay.gmail.com", 587, "demiancalleros1@gmail.com", "")
+
+// 	// Envía el correo
+// 	if err := d.DialAndSend(m); err != nil {
+// 		log.Fatal(err)
 // 	}
-// 	return http.StatusOK
+
+// 	return map[string]interface{}{
+// 		"message": "Email sent!",
+// 	}
 // }
 
 // func ApplyPasswordChange(u *Users) {

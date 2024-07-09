@@ -73,9 +73,10 @@ my_project/
       * [ ] CRUD routes
       * [ ] CRUD service
       * [ ] validation
-    * [ ] auth
-      * [ ] Routes
-      * [ ] Service
+    * [X] auth
+      Not working due a missing smtp server
+      * [X] Routes
+      * [X] Service
   * [ ] middlewares
     * [X] auth
     * [ ] rootAuth
