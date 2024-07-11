@@ -65,10 +65,10 @@ my_project/
       * [X] CRUD service
       * [X] validation
       * [X] Encrypt
-    * [ ] money
-      * [ ] CRUD routes
-      * [ ] CRUD service
-      * [ ] validation
+    * [X] money
+      * [X] CRUD routes
+      * [X] CRUD service
+      * [X] validation
     * [ ] orders
       * [ ] CRUD routes
       * [ ] CRUD service

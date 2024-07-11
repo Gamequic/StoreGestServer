@@ -3,6 +3,8 @@ package featuresApi
 import (
 	"storegestserver/pkg/features/auth"
 	authservice "storegestserver/pkg/features/auth/service"
+	"storegestserver/pkg/features/money"
+	moneyservice "storegestserver/pkg/features/money/service"
 	"storegestserver/pkg/features/users"
 	userservice "storegestserver/pkg/features/users/service"
 
@@ -12,9 +14,11 @@ import (
 func RegisterSubRoutes(router *mux.Router) {
 	userservice.InitUsersService()
 	authservice.InitAuthService()
+	moneyservice.InitMoneyService()
 
 	apiRouter := router.PathPrefix("/api").Subrouter()
 
 	users.RegisterSubRoutes(apiRouter)
 	auth.RegisterSubRoutes(apiRouter)
+	money.RegisterSubRoutes(apiRouter)
 }
