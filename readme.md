@@ -13,6 +13,13 @@ my_project/
 │   └── database/      // Database functions and configurations
 │       └── db.go      // Database configuration and functions
 ├── features/          // Project features specific functionalities
+|   ├── photos         // Crud for server public fotos
+│   │   ├── handlers/  // HTTP handlers for photos
+│   │   │   └── photos_handler.go
+│   │   ├── models/    // photos-specific models
+│   │   │   └── photos.go
+│   │   └── repository/ // photos-specific repository
+│   │       └── photos_repository.go
 │   ├── user/          // User-related functionalities
 │   │   ├── handlers/  // HTTP handlers for users
 │   │   │   └── user_handler.go
@@ -56,10 +63,14 @@ my_project/
 * [ ] pkg
   * [x] database
   * [ ] features
-    * [ ] food
+    * [ ] Photos
       * [ ] CRUD routes
       * [ ] CRUD service
       * [ ] validation
+    * [X] food
+      * [X] CRUD routes
+      * [X] CRUD service
+      * [X] validation
     * [X] users
       * [X] CRUD routes
       * [X] CRUD service
@@ -85,3 +96,4 @@ my_project/
     * [ ] ValidatorHandlerForURL
 * [ ] Run proyect file
 * [ ] Explain erros captures
+* [ ] Fix readme.md

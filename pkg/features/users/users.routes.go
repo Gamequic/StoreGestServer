@@ -86,18 +86,18 @@ func RegisterSubRoutes(router *mux.Router) {
 	usersRouter := router.PathPrefix("/users").Subrouter()
 
 	// ValidatorHandler
-	usersUpdateValidtor := usersRouter.NewRoute().Subrouter()
-	usersUpdateValidtor.Use(middlewares.ValidatorHandler(reflect.TypeOf(userstruct.UpdateUser{})))
-	usersUpdateValidtor.Use(middlewares.AuthHandler)
+	usersUpdateValidator := usersRouter.NewRoute().Subrouter()
+	usersUpdateValidator.Use(middlewares.ValidatorHandler(reflect.TypeOf(userstruct.UpdateUser{})))
+	usersUpdateValidator.Use(middlewares.AuthHandler)
 
 	userCreateValidator := usersRouter.NewRoute().Subrouter()
 	userCreateValidator.Use(middlewares.ValidatorHandler(reflect.TypeOf(userstruct.CreateUser{})))
-	usersUpdateValidtor.Use(middlewares.AuthHandler)
+	usersUpdateValidator.Use(middlewares.AuthHandler)
 
 	usersRoot := usersRouter.NewRoute().Subrouter()
 	usersRoot.Use(middlewares.RootHandler)
 
-	usersUpdateValidtor.HandleFunc("/", update).Methods("PATCH")
+	usersUpdateValidator.HandleFunc("/", update).Methods("PATCH")
 	userCreateValidator.HandleFunc("/", create).Methods("POST")
 
 	usersRoot.HandleFunc("/", find).Methods("GET")
