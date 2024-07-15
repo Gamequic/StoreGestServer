@@ -60,10 +60,10 @@ my_project/
 
 # To-do
 
-* [ ] pkg
+* [ ] pkg 🔴
   * [x] database
   * [ ] features
-    * [ ] Photos
+    * [ ] Photos 🟢
       * [ ] CRUD routes
       * [ ] CRUD service
       * [ ] validation
@@ -86,6 +86,7 @@ my_project/
       * [ ] validation
     * [X] auth
       Not working due a missing smtp server
+      (Recovery passoword)
       * [X] Routes
       * [X] Service
   * [ ] middlewares
@@ -94,6 +95,10 @@ my_project/
     * [X] errorHandler
     * [X] ValidatorHandler
     * [ ] ValidatorHandlerForURL
-* [ ] Run proyect file
-* [ ] Explain erros captures
-* [ ] Fix readme.md
+* [ ] Run proyect file 🟢
+* [ ] Explain erros captures 🟢
+* [ ] Fix readme.md 🟢
+
+## Flags
+- 🔴 Urgent
+- 🟢 Later
