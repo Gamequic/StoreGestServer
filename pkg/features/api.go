@@ -7,6 +7,8 @@ import (
 	foodservice "storegestserver/pkg/features/food/service"
 	"storegestserver/pkg/features/money"
 	moneyservice "storegestserver/pkg/features/money/service"
+	"storegestserver/pkg/features/orders"
+	ordersservice "storegestserver/pkg/features/orders/service"
 	"storegestserver/pkg/features/users"
 	userservice "storegestserver/pkg/features/users/service"
 
@@ -18,6 +20,7 @@ func RegisterSubRoutes(router *mux.Router) {
 	authservice.InitAuthService()
 	moneyservice.InitMoneyService()
 	foodservice.InitFoodService()
+	ordersservice.InitOrdersService()
 
 	apiRouter := router.PathPrefix("/api").Subrouter()
 
@@ -25,4 +28,5 @@ func RegisterSubRoutes(router *mux.Router) {
 	auth.RegisterSubRoutes(apiRouter)
 	money.RegisterSubRoutes(apiRouter)
 	food.RegisterSubRoutes(apiRouter)
+	orders.RegisterSubRoutes(apiRouter)
 }

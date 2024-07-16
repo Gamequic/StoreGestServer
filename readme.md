@@ -80,10 +80,10 @@ my_project/
       * [X] CRUD routes
       * [X] CRUD service
       * [X] validation
-    * [ ] orders
-      * [ ] CRUD routes
-      * [ ] CRUD service
-      * [ ] validation
+    * [X] orders
+      * [X] CRUD routes
+      * [X] CRUD service
+      * [X] validation
     * [X] auth
       Not working due a missing smtp server
       (Recovery passoword)
@@ -94,10 +94,11 @@ my_project/
     * [X] rootAuth
     * [X] errorHandler
     * [X] ValidatorHandler
-    * [ ] ValidatorHandlerForURL
+* [ ] relationships between tables 🔴
 * [ ] Run proyect file 🟢
 * [ ] Explain erros captures 🟢
 * [ ] Fix readme.md 🟢
+* [ ] Unit testing
 
 ## Flags
 - 🔴 Urgent
