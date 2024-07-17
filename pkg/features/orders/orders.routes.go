@@ -75,8 +75,6 @@ func RegisterSubRoutes(router *mux.Router) {
 	// ValidatorHandler
 	orderCreateValidator := OrderRouter.NewRoute().Subrouter()
 	orderCreateValidator.Use(middlewares.ValidatorHandler(reflect.TypeOf(ordersstruct.CreateOrders{})))
-	orderUpdateValidator := OrderRouter.NewRoute().Subrouter()
-	orderUpdateValidator.Use(middlewares.ValidatorHandler(reflect.TypeOf(ordersstruct.UpdateOrders{})))
 	orderGetByDateValidator := OrderRouter.NewRoute().Subrouter()
 	orderGetByDateValidator.Use(middlewares.ValidatorHandler(reflect.TypeOf(ordersstruct.GetOrdersByDate{})))
 

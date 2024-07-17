@@ -1,8 +1,9 @@
 package ordersstruct
 
 type CreateOrders struct {
-	FoodList []uint `validate:"required,min=1,dive,gt=0"`
-	Amount   uint   `validate:"required,gt=0"`
+	FoodList   []uint `validate:"required,min=1,dive,gt=0"`
+	FoodAmount []uint `validate:"required,min=1,dive,gt=0"`
+	Amount     uint   `validate:"required,gt=0"`
 }
 
 type GetOrdersByDate struct {

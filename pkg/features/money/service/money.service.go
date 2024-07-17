@@ -77,6 +77,17 @@ func FindOne(Money *Money, id uint) int {
 	return http.StatusOK
 }
 
+func FindLastOne(Money *Money) int {
+	if err := database.DB.Order("ID DESC").First(Money).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			panic(middlewares.GormError{Code: 404, Message: "Record not found", IsGorm: true})
+		} else {
+			panic(err)
+		}
+	}
+	return http.StatusOK
+}
+
 func FindByDate(moneyRecords *[]Money, body moneystruct.GetMoneyByDate) int {
 
 	startDate := time.Date(int(body.Year), time.Month(body.Month), int(body.Day), 0, 0, 0, 0, time.UTC)

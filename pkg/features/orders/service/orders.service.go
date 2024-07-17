@@ -23,7 +23,9 @@ var Logger *zap.Logger
 type Orders struct {
 	gorm.Model               // Embedding gorm.Model for default fields like ID, CreatedAt, UpdatedAt, DeletedAt
 	FoodList   pq.Int64Array `gorm:"type:integer[]"`
+	FoodAmount pq.Int64Array `gorm:"type:integer[]"`
 	Amount     uint          `gorm:"not null"`
+	MoneyId    uint          `gorm:"not null"`
 }
 
 // Initialize the money service
@@ -39,6 +41,11 @@ func InitOrdersService() {
 
 func Create(Order *Orders) {
 
+	// Check if it is the same lenght of two list
+	if len(Order.FoodList) != len(Order.FoodAmount) {
+		panic(middlewares.GormError{Code: http.StatusBadRequest, Message: "Error in food list and amount, Line 46 order.service.go", IsGorm: true})
+	}
+
 	// Check if all items exist
 	var food foodservice.Food
 	for _, foodID := range Order.FoodList {
@@ -50,6 +57,9 @@ func Create(Order *Orders) {
 	MoneyOperation.Amount = int(Order.Amount)
 	MoneyOperation.Reason = "Compra"
 	moneyservice.Create(&MoneyOperation)
+
+	// Add MoneyId to Order
+	Order.MoneyId = MoneyOperation.ID
 
 	// Convert FoodList to pq.Int64Array
 	Order.FoodList = pq.Int64Array(Order.FoodList)

@@ -40,6 +40,13 @@ func find(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(Money)
 }
 
+func findLastOne(w http.ResponseWriter, r *http.Request) {
+	var Money moneyservice.Money
+	var httpsResponse int = moneyservice.FindLastOne(&Money)
+	w.WriteHeader(httpsResponse)
+	json.NewEncoder(w).Encode(Money)
+}
+
 func findOne(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, err := strconv.Atoi(vars["id"])
@@ -78,6 +85,7 @@ func RegisterSubRoutes(router *mux.Router) {
 
 	MoneyCreatorValidtor.HandleFunc("/", create).Methods("POST")
 	moneyRouter.HandleFunc("/", find).Methods("GET")
+	moneyRouter.HandleFunc("/lastOne", findLastOne).Methods("GET")
 	moneyRouter.HandleFunc("/{id}", findOne).Methods("GET")
 	MoneyGetByDay.HandleFunc("/findByDate", findByDate).Methods("POST")
 }
