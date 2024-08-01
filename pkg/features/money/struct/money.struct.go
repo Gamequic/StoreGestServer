@@ -1,7 +1,7 @@
 package moneystruct
 
 type CreateMoney struct {
-	Amount      int     `validate:"required"`
+	Amount      float64 `validate:"required"`
 	Reason      string  `validate:"required"`
 	Description *string `validate:"omitempty"`
 }

@@ -99,7 +99,12 @@ my_project/
 * [ ] Explain erros captures 🟢
 * [ ] Fix readme.md 🟢
 * [ ] Unit testing
+* [ ] Load the timezone from .env
 
 ## Flags
 - 🔴 Urgent
 - 🟢 Later
+
+# We use SemVer to versioning
+
+https://semver.org/spec/v2.0.0.html

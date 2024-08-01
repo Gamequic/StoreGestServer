@@ -9,8 +9,8 @@ type CreateFood struct {
 
 type UpdateFood struct {
 	ID     int    `validate:"required"`
-	Name   string `validate:"omitempty,min=3"`
-	Amount uint   `validate:"omitempty,gt=0"`
+	Name   string `validate:"required,omitempty,min=3"`
+	Amount uint   `validate:"required,omitempty,gt=0"`
 	Photo  string `validate:"omitempty,url"`
 	IsKg   bool   `validate:"omitempty"`
 }

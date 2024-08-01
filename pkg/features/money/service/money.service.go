@@ -19,11 +19,11 @@ var Logger *zap.Logger
 
 // Define the user model
 type Money struct {
-	gorm.Model         // Embedding gorm.Model for default fields like ID, CreatedAt, UpdatedAt, DeletedAt
-	Amount      int    `gorm:"not null"`
-	Current     int    `gorm:"not null"`
-	Reason      string `gorm:"omitempty"`
-	Description string `gorm:"not null"`
+	gorm.Model          // Embedding gorm.Model for default fields like ID, CreatedAt, UpdatedAt, DeletedAt
+	Amount      float64 `gorm:"not null"`
+	Current     float64 `gorm:"not null"`
+	Reason      string  `gorm:"omitempty"`
+	Description string  `gorm:"not null"`
 }
 
 // Initialize the money service
@@ -90,10 +90,19 @@ func FindLastOne(Money *Money) int {
 
 func FindByDate(moneyRecords *[]Money, body moneystruct.GetMoneyByDate) int {
 
-	startDate := time.Date(int(body.Year), time.Month(body.Month), int(body.Day), 0, 0, 0, 0, time.UTC)
-	endDate := time.Date(int(body.Year), time.Month(body.Month), int(body.Day)+1, 0, 0, 0, 0, time.UTC)
+	// Set the time for the correct timezone
+	// To-do
+	// [ ] Load this from .env
+	location, err := time.LoadLocation("America/Mexico_City")
+	if err != nil {
+		fmt.Println("Error loading location:", err)
+		return http.StatusInternalServerError
+	}
 
-	database.DB.Where("created_at BETWEEN ? AND ?", startDate, endDate).Find(&moneyRecords)
+	startDate := time.Date(int(body.Year), time.Month(body.Month), int(body.Day), 0, 0, 0, 0, location)
+	endDate := time.Date(int(body.Year), time.Month(body.Month), int(body.Day), 23, 59, 59, 999999999, location)
+
+	database.DB.Where("created_at BETWEEN ? AND ?", startDate, endDate).Find(moneyRecords)
 
 	return http.StatusOK
 }

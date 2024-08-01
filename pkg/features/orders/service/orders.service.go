@@ -21,11 +21,11 @@ var Logger *zap.Logger
 
 // Define the order model
 type Orders struct {
-	gorm.Model               // Embedding gorm.Model for default fields like ID, CreatedAt, UpdatedAt, DeletedAt
-	FoodList   pq.Int64Array `gorm:"type:integer[]"`
-	FoodAmount pq.Int64Array `gorm:"type:integer[]"`
-	Amount     uint          `gorm:"not null"`
-	MoneyId    uint          `gorm:"not null"`
+	gorm.Model                 // Embedding gorm.Model for default fields like ID, CreatedAt, UpdatedAt, DeletedAt
+	FoodList   pq.Int64Array   `gorm:"type:integer[]"`
+	FoodAmount pq.Float64Array `gorm:"type:float[]"`
+	Amount     float64         `gorm:"not null"`
+	MoneyId    uint            `gorm:"not null"`
 }
 
 // Initialize the money service
@@ -49,12 +49,13 @@ func Create(Order *Orders) {
 	// Check if all items exist
 	var food foodservice.Food
 	for _, foodID := range Order.FoodList {
+		food = foodservice.Food{}
 		foodservice.FindOne(&food, uint(foodID))
 	}
 
 	// Add money operation to db
 	var MoneyOperation moneyservice.Money
-	MoneyOperation.Amount = int(Order.Amount)
+	MoneyOperation.Amount = float64(Order.Amount)
 	MoneyOperation.Reason = "Compra"
 	moneyservice.Create(&MoneyOperation)
 
@@ -90,9 +91,17 @@ func FindOne(Orders *Orders, id uint) int {
 }
 
 func FindByDate(OrdersRecord *[]Orders, body ordersstruct.GetOrdersByDate) int {
+	// Set the time for the correct timezone
+	// To-do
+	// [ ] Load this from .env
+	location, err := time.LoadLocation("America/Mexico_City")
+	if err != nil {
+		fmt.Println("Error loading location:", err)
+		return http.StatusInternalServerError
+	}
 
-	startDate := time.Date(int(body.Year), time.Month(body.Month), int(body.Day), 0, 0, 0, 0, time.UTC)
-	endDate := time.Date(int(body.Year), time.Month(body.Month), int(body.Day)+1, 0, 0, 0, 0, time.UTC)
+	startDate := time.Date(int(body.Year), time.Month(body.Month), int(body.Day), 0, 0, 0, 0, location)
+	endDate := time.Date(int(body.Year), time.Month(body.Month), int(body.Day), 23, 59, 59, 999999999, location)
 
 	database.DB.Where("created_at BETWEEN ? AND ?", startDate, endDate).Find(&OrdersRecord)
 
