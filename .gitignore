@@ -1,3 +1,5 @@
 storeGest
 .env
 logs/
+main
+static/

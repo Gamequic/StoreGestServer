@@ -63,10 +63,16 @@ my_project/
 * [ ] pkg 🔴
   * [x] database
   * [ ] features
-    * [ ] Photos 🟢
-      * [ ] CRUD routes
-      * [ ] CRUD service
-      * [ ] validation
+    * [ ] Dashboard
+      * [ ] SalesOnCurrentDate
+      * [ ] MostSale
+      * [ ] Orders
+        * [ ] orders attended today
+        * [ ] average per orders
+    * [X] Photos 🟢
+      * [X] CRUD routes
+      * [X] CRUD service
+      * [X] validation
     * [X] food
       * [X] CRUD routes
       * [X] CRUD service
