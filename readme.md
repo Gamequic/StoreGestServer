@@ -73,6 +73,7 @@ my_project/
       * [X] CRUD routes
       * [X] CRUD service
       * [X] validation
+      * [ ] function to delete unused photos
     * [X] food
       * [X] CRUD routes
       * [X] CRUD service
