@@ -106,3 +106,22 @@ func FindByDate(moneyRecords *[]Money, body moneystruct.GetMoneyByDate) int {
 
 	return http.StatusOK
 }
+
+func FindByDateRange(moneyRecords *[]Money, body moneystruct.GetMoneyByDateRange) int {
+
+	// Set the time for the correct timezone
+	// To-do
+	// [ ] Load this from .env
+	location, err := time.LoadLocation("America/Mexico_City")
+	if err != nil {
+		fmt.Println("Error loading location:", err)
+		return http.StatusInternalServerError
+	}
+
+	startDate := time.Date(int(body.InitYear), time.Month(body.InitMonth), int(body.InitDay), 0, 0, 0, 0, location)
+	endDate := time.Date(int(body.EndYear), time.Month(body.EndMonth), int(body.EndDay), 23, 59, 59, 999999999, location)
+
+	database.DB.Where("created_at BETWEEN ? AND ?", startDate, endDate).Find(moneyRecords)
+
+	return http.StatusOK
+}

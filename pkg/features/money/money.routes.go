@@ -71,6 +71,18 @@ func findByDate(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(Money)
 }
 
+func findByDateRange(w http.ResponseWriter, r *http.Request) {
+	// Date
+	var Date moneystruct.GetMoneyByDateRange
+	json.NewDecoder(r.Body).Decode(&Date)
+	// db
+	var Money []moneyservice.Money
+	var httpsResponse int = moneyservice.FindByDateRange(&Money, Date)
+	// response
+	w.WriteHeader(httpsResponse)
+	json.NewEncoder(w).Encode(Money)
+}
+
 // Register function
 
 func RegisterSubRoutes(router *mux.Router) {
@@ -79,13 +91,16 @@ func RegisterSubRoutes(router *mux.Router) {
 	// ValidatorHandler
 	MoneyCreatorValidtor := moneyRouter.NewRoute().Subrouter()
 	MoneyCreatorValidtor.Use(middlewares.ValidatorHandler(reflect.TypeOf(moneystruct.CreateMoney{})))
-	MoneyGetByDay := moneyRouter.NewRoute().Subrouter()
-	MoneyGetByDay.Use(middlewares.ValidatorHandler(reflect.TypeOf(moneystruct.GetMoneyByDate{})))
+	MoneyGetByDate := moneyRouter.NewRoute().Subrouter()
+	MoneyGetByDate.Use(middlewares.ValidatorHandler(reflect.TypeOf(moneystruct.GetMoneyByDate{})))
+	MoneyGetByDateRange := moneyRouter.NewRoute().Subrouter()
+	MoneyGetByDateRange.Use(middlewares.ValidatorHandler(reflect.TypeOf(moneystruct.GetMoneyByDateRange{})))
 	moneyRouter.Use(middlewares.AuthHandler)
 
 	MoneyCreatorValidtor.HandleFunc("/", create).Methods("POST")
 	moneyRouter.HandleFunc("/", find).Methods("GET")
 	moneyRouter.HandleFunc("/lastOne", findLastOne).Methods("GET")
 	moneyRouter.HandleFunc("/{id}", findOne).Methods("GET")
-	MoneyGetByDay.HandleFunc("/findByDate", findByDate).Methods("POST")
+	MoneyGetByDate.HandleFunc("/findByDate", findByDate).Methods("POST")
+	MoneyGetByDateRange.HandleFunc("/findByDateRange", findByDateRange).Methods("POST")
 }
