@@ -64,6 +64,30 @@ func findByDate(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(Orders)
 }
 
+func findByDateRange(w http.ResponseWriter, r *http.Request) {
+	// Date
+	var Date ordersstruct.GetOrdersByDateRange
+	json.NewDecoder(r.Body).Decode(&Date)
+	// db
+	var Orders []ordersservice.Orders
+	var httpsResponse int = ordersservice.FindByDateRange(&Orders, Date)
+	// response
+	w.WriteHeader(httpsResponse)
+	json.NewEncoder(w).Encode(Orders)
+}
+
+func statistics(w http.ResponseWriter, r *http.Request) {
+	// Date
+	var Date ordersstruct.GetOrdersByDateRange
+	json.NewDecoder(r.Body).Decode(&Date)
+	// db
+	var Statistics ordersstruct.Statistics
+	var httpsResponse int = ordersservice.Statistics(&Statistics, Date)
+	// response
+	w.WriteHeader(httpsResponse)
+	json.NewEncoder(w).Encode(Statistics)
+}
+
 // Register function
 
 func RegisterSubRoutes(router *mux.Router) {
@@ -77,10 +101,14 @@ func RegisterSubRoutes(router *mux.Router) {
 	orderCreateValidator.Use(middlewares.ValidatorHandler(reflect.TypeOf(ordersstruct.CreateOrders{})))
 	orderGetByDateValidator := OrderRouter.NewRoute().Subrouter()
 	orderGetByDateValidator.Use(middlewares.ValidatorHandler(reflect.TypeOf(ordersstruct.GetOrdersByDate{})))
+	orderGetByDateRangeValidator := OrderRouter.NewRoute().Subrouter()
+	orderGetByDateRangeValidator.Use(middlewares.ValidatorHandler(reflect.TypeOf(ordersstruct.GetOrdersByDateRange{})))
 
 	orderCreateValidator.HandleFunc("/", create).Methods("POST")
 
 	OrderRouter.HandleFunc("/", find).Methods("GET")
 	OrderRouter.HandleFunc("/{id}", findOne).Methods("GET")
 	orderGetByDateValidator.HandleFunc("/findByDate", findByDate).Methods("POST")
+	orderGetByDateRangeValidator.HandleFunc("/findByDateRange", findByDateRange).Methods("POST")
+	orderGetByDateRangeValidator.HandleFunc("/statistics", statistics).Methods("POST")
 }

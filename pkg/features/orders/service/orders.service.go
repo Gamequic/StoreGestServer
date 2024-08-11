@@ -107,3 +107,43 @@ func FindByDate(OrdersRecord *[]Orders, body ordersstruct.GetOrdersByDate) int {
 
 	return http.StatusOK
 }
+
+func FindByDateRange(ordersRecords *[]Orders, body ordersstruct.GetOrdersByDateRange) int {
+
+	// Set the time for the correct timezone
+	// To-do
+	// [ ] Load this from .env
+	location, err := time.LoadLocation("America/Mexico_City")
+	if err != nil {
+		fmt.Println("Error loading location:", err)
+		return http.StatusInternalServerError
+	}
+
+	startDate := time.Date(int(body.InitYear), time.Month(body.InitMonth), int(body.InitDay), 0, 0, 0, 0, location)
+	endDate := time.Date(int(body.EndYear), time.Month(body.EndMonth), int(body.EndDay), 23, 59, 59, 999999999, location)
+
+	database.DB.Where("created_at BETWEEN ? AND ?", startDate, endDate).Find(ordersRecords)
+
+	return http.StatusOK
+}
+
+func Statistics(Statistics *ordersstruct.Statistics, body ordersstruct.GetOrdersByDateRange) int {
+	var Orders []Orders
+
+	FindByDateRange(&Orders, body)
+
+	var average float64 = 0
+	var ordersNumber int = 0
+
+	for _, order := range Orders {
+		average = average + float64(order.Amount)
+		ordersNumber++
+	}
+
+	average = average / float64(len(Orders))
+
+	Statistics.Average = average
+	Statistics.OrdersNumber = ordersNumber
+
+	return http.StatusOK
+}

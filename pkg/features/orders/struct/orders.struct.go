@@ -11,3 +11,17 @@ type GetOrdersByDate struct {
 	Month uint `validate:"required,min=1,max=12"`
 	Day   uint `validate:"required,min=1,max=31"`
 }
+
+type GetOrdersByDateRange struct {
+	InitYear  uint `validate:"required,min=1970,max=2038"`
+	InitMonth uint `validate:"required,min=1,max=12"`
+	InitDay   uint `validate:"required,min=1,max=31"`
+	EndYear   uint `validate:"required,min=1970,max=2038"`
+	EndMonth  uint `validate:"required,min=1,max=12"`
+	EndDay    uint `validate:"required,min=1,max=31"`
+}
+
+type Statistics struct {
+	Average      float64
+	OrdersNumber int
+}
