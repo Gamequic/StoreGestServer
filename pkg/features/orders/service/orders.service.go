@@ -3,6 +3,7 @@ package ordersservice
 import (
 	"fmt"
 	"net/http"
+	"sort"
 	"storegestserver/pkg/database"
 	foodservice "storegestserver/pkg/features/food/service"
 	moneyservice "storegestserver/pkg/features/money/service"
@@ -135,9 +136,38 @@ func Statistics(Statistics *ordersstruct.Statistics, body ordersstruct.GetOrders
 	var average float64 = 0
 	var ordersNumber int = 0
 
+	salesPerItem := make(map[int]float64)
+
+	// get a list of the amount of sales of each product
 	for _, order := range Orders {
+		for index, foodId := range order.FoodList {
+			_, exists := salesPerItem[int(foodId)]
+			if exists {
+				salesPerItem[int(foodId)] = salesPerItem[int(foodId)] + float64(order.FoodAmount[index])
+			} else {
+				salesPerItem[int(foodId)] = float64(order.FoodAmount[index])
+			}
+		}
 		average = average + float64(order.Amount)
 		ordersNumber++
+	}
+
+	/* order the list from largest to smallest */
+	// Step 1: Get the keys from the map
+	keys := make([]int, 0, len(salesPerItem))
+	for k := range salesPerItem {
+		keys = append(keys, k)
+	}
+	// Step 2: Sort the keys based on the map values
+	sort.Slice(keys, func(i, j int) bool {
+		return salesPerItem[keys[i]] > salesPerItem[keys[j]]
+	})
+
+	// Get the first 3 products and added to the petition
+	for i := 0; i < 3 && i < len(keys); i++ {
+		var food foodservice.Food
+		foodservice.FindOne(&food, uint(keys[i]))
+		Statistics.Products = append(Statistics.Products, food)
 	}
 
 	average = average / float64(len(Orders))

@@ -1,5 +1,9 @@
 package ordersstruct
 
+import (
+	foodservice "storegestserver/pkg/features/food/service"
+)
+
 type CreateOrders struct {
 	FoodList   []uint    `validate:"required,min=1,dive,gt=0"`
 	FoodAmount []float64 `validate:"required,min=1,dive,gt=0"`
@@ -22,6 +26,7 @@ type GetOrdersByDateRange struct {
 }
 
 type Statistics struct {
+	Products     []foodservice.Food
 	Average      float64
 	OrdersNumber int
 }
