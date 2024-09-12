@@ -1,0 +1,51 @@
+# To-do
+
+* [ ] pkg 🔴
+  * [x] database
+  * [ ] features
+    * [ ] Dashboard
+      * [ ] SalesOnCurrentDate
+      * [ ] MostSale
+      * [ ] Orders
+        * [ ] orders attended today
+        * [ ] average per orders
+    * [X] Photos 🟢
+      * [X] CRUD routes
+      * [X] CRUD service
+      * [X] validation
+      * [ ] function to delete unused photos
+    * [X] food
+      * [X] CRUD routes
+      * [X] CRUD service
+      * [X] validation
+    * [X] users
+      * [X] CRUD routes
+      * [X] CRUD service
+      * [X] validation
+      * [X] Encrypt
+    * [X] money
+      * [X] CRUD routes
+      * [X] CRUD service
+      * [X] validation
+    * [X] orders
+      * [X] CRUD routes
+      * [X] CRUD service
+      * [X] validation
+    * [X] auth
+      * [ ] Recovery passoword
+            - Not working due a missing smtp server
+      * [X] Routes
+      * [X] Service
+  * [ ] middlewares
+    * [X] auth
+    * [X] rootAuth
+    * [X] errorHandler
+    * [X] ValidatorHandler
+* [ ] relationships between tables 🔴
+* [ ] Explain rutes 
+* [ ] Unit testing
+* [ ] Load the timezone from .env
+
+## Flags
+- 🔴 Urgent
+- 🟢 Later
