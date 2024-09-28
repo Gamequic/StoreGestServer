@@ -2,4 +2,5 @@ storeGest
 .env
 logs/
 main
+main.exe
 static/

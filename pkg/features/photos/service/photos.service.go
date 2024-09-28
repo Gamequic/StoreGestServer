@@ -16,7 +16,7 @@ func InitPhotosService() {
 	// Create the directory with 0755 permissions (readable and executable by everyone, writable by the owner)
 	err := os.Mkdir(dirName, 0755)
 	if err != nil {
-		if err.Error() != "mkdir static: file exists" { // If the error is "folder exists" ignore
+		if !os.IsExist(err) { // If the error is "folder exists" ignore
 			panic(err)
 		}
 	}
