@@ -18,7 +18,7 @@ func LogIn(w http.ResponseWriter, r *http.Request) {
 
 	json.NewDecoder(r.Body).Decode(&user)
 
-	var token string = authservice.LogIn(&user)
+	var token authstruct.UserData = authservice.LogIn(&user)
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(token)
 }

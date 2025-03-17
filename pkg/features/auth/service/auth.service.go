@@ -22,7 +22,7 @@ func InitAuthService() {
 
 // Auth Operations
 
-func LogIn(u *authstruct.LogIn) string {
+func LogIn(u *authstruct.LogIn) authstruct.UserData {
 	var jwtKey = []byte(os.Getenv("JWTSECRET"))
 
 	// Check if user exists
@@ -56,7 +56,14 @@ func LogIn(u *authstruct.LogIn) string {
 		panic(err)
 	}
 
-	return tokenString
+	userData := authstruct.UserData{
+		Email:    user.Email,
+		Name:     user.Name,
+		Password: user.Password,
+		Token:    tokenString,
+	}
+
+	return userData
 }
 
 // func RequestPasswordChange(Email string) map[string]interface{} {
